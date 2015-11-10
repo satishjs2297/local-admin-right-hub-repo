@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd ">
+
+	<!-- Service Bean Resolution & Activation -->
+	<context:component-scan base-package="com.alti.local.admin.service" />
+	
+	<task:annotation-driven/>
+	
+	<context:property-placeholder location="classpath:/config/localadmin-config.properties"/>
+
+	<!-- Mail Sender -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${HOST}" />
+		<property name="port" value="${PORT}" />
+		<property name="username" value="${USER_NAME}" />
+		<property name="password" value="${PASSWORD}" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">${MAIL.SMTP.AUTH}</prop>
+				<prop key="mail.smtp.starttls.enable">${MAIL.SMTP.STARTTLS.ENABLE}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- SimpleMailMessage -->
+	<bean id="simpleMailMessage" class="org.springframework.mail.SimpleMailMessage">
+		<property name="from" value="${FROM.EMAILID}" />
+	</bean>
+
+
+</beans>
