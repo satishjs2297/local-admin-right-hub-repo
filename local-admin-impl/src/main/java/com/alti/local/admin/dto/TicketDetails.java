@@ -6,10 +6,13 @@ package com.alti.local.admin.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * @author syandagudita
  *
  */
+@JsonIgnoreProperties
 public class TicketDetails extends User implements Serializable {
 
 	/**

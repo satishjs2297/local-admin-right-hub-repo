@@ -39,6 +39,7 @@ public class LocalAdminDAOImpl implements LocalAdminDAO {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean updateUserTicketDetails(UserTicketDetails userTckDtls)
 			throws Exception {
 

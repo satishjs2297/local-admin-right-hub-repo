@@ -13,7 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.alti.local.admin.dto.TicketDetails;
-import com.alti.local.admin.util.TicketStatus;
 
 /**
  * @author syandagudita
@@ -48,9 +47,10 @@ public class LocalAdminServiceTest {
 	}
 	
 	@Test
-	public void testSaveUserTicketDetails() {
+	public void testSaveUserTicketDetails() throws InterruptedException {
 		String ticketId = localAdminService.saveUserTicketDetails(ticketDetails);
 		Assert.assertNotNull(ticketId);
+		Thread.sleep(10000);
 		
 	}
 	

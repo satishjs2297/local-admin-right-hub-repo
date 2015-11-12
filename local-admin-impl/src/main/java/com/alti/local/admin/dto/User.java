@@ -2,6 +2,9 @@ package com.alti.local.admin.dto;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties
 public class User implements Serializable{
 	
 	public User() {

@@ -9,7 +9,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 
 /**
- * @author Hari
+ * @author syandagudita
  */
 @MappedSuperclass
 public abstract class BaseEntity<ID> {

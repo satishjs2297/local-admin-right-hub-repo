@@ -21,10 +21,11 @@ import com.alti.local.admin.exception.ViewNotFoundException;
  */
 @Controller
 @RequestMapping("/ahome")
+@Deprecated
 public class LocalAdminHomeController {
 
 	
-	@RequestMapping("/router")
+	@RequestMapping(value = "/router")
 	public String postLoginRouter(@RequestBody User userDtls, Model model) {
 		
 		String viewName = null;
@@ -32,6 +33,7 @@ public class LocalAdminHomeController {
 		
 		userRoleId = "3";
 		model.addAttribute("user", userDtls);
+		model.addAttribute("greetings", "checking expression");
 		
 		if(MANAGER_ROLEID.equals(userRoleId)) {
 			viewName = "manager/ticketlsthome";

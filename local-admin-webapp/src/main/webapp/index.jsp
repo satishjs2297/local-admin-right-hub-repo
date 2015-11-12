@@ -28,7 +28,7 @@
 	
 </head>
 <body>
-	<form id="login-form" action="/app/ladmin/raisetck" method="POST" >
+	<form id="login-form" action="<%=request.getContextPath() %>/app/ahome/router" method="GET" >
 		<div class="divTable">
 			<div class="divRow">
 				<div class="divCell"><label>User Name</label></div>

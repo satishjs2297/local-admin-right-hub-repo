@@ -15,6 +15,7 @@ import com.alti.local.admin.dao.model.UserTicketDetails;
 import com.alti.local.admin.dto.TicketDetails;
 import com.alti.local.admin.exception.LocalAdminException;
 import com.alti.local.admin.util.LocalAdminConstants;
+import com.alti.local.admin.util.TicketDetailsUtil;
 
 /**
  * @author syandagudita
@@ -56,8 +57,7 @@ public class LocalAdminServiceImpl implements LocalAdminService {
 				.findUserTicketDetailsByStatus(status);
 		List<TicketDetails> tckDtlsLst = new ArrayList<TicketDetails>();
 		for (UserTicketDetails userTckDtls : ticketDetailsByStatus) {
-			TicketDetails targetTckDtls = new TicketDetails();
-			BeanUtils.copyProperties(userTckDtls, targetTckDtls);
+			TicketDetails targetTckDtls = TicketDetailsUtil.convertToTicketDetails(userTckDtls);
 			tckDtlsLst.add(targetTckDtls);
 		}
 		return tckDtlsLst;
@@ -84,7 +84,10 @@ public class LocalAdminServiceImpl implements LocalAdminService {
 			userTicketDetails.setStatus(status);
 			boolean updateStatus = localAdminDAO.updateUserTicketDetails(userTicketDetails);
 			if(updateStatus)
-				updateMsg = "Seletect Ticket ( "+ ticketId + ") has been updated.";
+				updateMsg = "Selected Ticket ( "+ ticketId + ") has been updated.";
+			
+			// Send eMail to User
+			eMailService.sendTicketNotification(TicketDetailsUtil.convertToTicketDetails(userTicketDetails));
 
 		} catch (Exception ex) {
 			ex.printStackTrace();

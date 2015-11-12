@@ -40,7 +40,7 @@ public class LocalAdminDAOTest {
 
 	}
 
-	@Test @Ignore
+	@Test 
 	public void testSaveUserTicketDetails() {
 		try {
 			
@@ -51,7 +51,7 @@ public class LocalAdminDAOTest {
 		}
 	}
 	
-	@Test 
+	@Test @Ignore
 	public void testFindUserTicketDetails() {
 		List<UserTicketDetails> userTicketDtls = localAdminDAO.findUserTicketDetailsByStatus("inprogress");
 		Assert.assertNotNull(userTicketDtls);

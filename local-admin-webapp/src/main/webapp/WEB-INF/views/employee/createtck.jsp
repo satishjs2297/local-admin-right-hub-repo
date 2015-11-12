@@ -12,10 +12,10 @@
 
 </head>
 <body>
-	<p>${message}</p>
+	<p>${greetings}</p>
 	<h4>Local Admin Home page</h4>
 	<div><label>${message}</label></div> </br>
-	<form action="/app/ladmin/createreq" name="home-form" method="GET">
+	<form action="/app/ladmin/submitreq" name="home-form" method="GET">
 		<div><label>UserName : </label></div>
 		<div><label><c:out value="${user.userName}" /></label></div> </br>
 		<div><label>userId : </label></div>
