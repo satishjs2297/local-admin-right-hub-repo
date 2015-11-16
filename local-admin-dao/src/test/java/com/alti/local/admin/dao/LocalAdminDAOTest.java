@@ -22,6 +22,8 @@ public class LocalAdminDAOTest {
 	private LocalAdminDAO localAdminDAO;
 	
 	private UserTicketDetails userTicketDtls;
+	
+	
 
 	@Before
 	public void setUp() {

@@ -42,7 +42,6 @@ public class TicketIdGenerator implements IdentifierGenerator {
 			String dateInStr = sDateFormat.format(new Date(System
 					.currentTimeMillis()));
 			currentSeq = "LA" + dateInStr + String.format("%04d", seqValue);
-			;
 
 		} catch (Exception ex) {
 			ex.printStackTrace();

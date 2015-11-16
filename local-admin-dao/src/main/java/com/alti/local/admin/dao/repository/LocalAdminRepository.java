@@ -21,6 +21,5 @@ public interface LocalAdminRepository extends JpaRepository<UserTicketDetails, S
 	@Override
 	public UserTicketDetails findOne(String ticketId);
 	
-	
 
 }

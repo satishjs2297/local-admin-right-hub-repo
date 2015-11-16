@@ -21,7 +21,7 @@ import com.alti.local.admin.service.LocalAdminService;
 public abstract class AbstractLocalAdminController {
 
 	@Autowired
-	private LocalAdminService localAdminService;
+	protected LocalAdminService localAdminService;
 
 	@RequestMapping(value = "getTckDtls/{tckStatus}")
 	public List<TicketDetails> getTicketDetails(
