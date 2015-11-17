@@ -5,6 +5,8 @@ package com.alti.local.admin.service;
 
 import java.util.concurrent.Future;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -26,6 +28,9 @@ import com.alti.local.admin.util.TicketStatus;
 @Service
 public class LocalAdminMailServiceImpl implements LocalAdminMailService {
 
+	private static final Logger LOG = LoggerFactory
+			.getLogger(LocalAdminMailService.class);
+
 	@Autowired
 	private MailSender mailSender;
 
@@ -38,11 +43,10 @@ public class LocalAdminMailServiceImpl implements LocalAdminMailService {
 	@Override
 	public Future<Boolean> sendTicketNotification(String content,
 			String... emailIdLst) throws MailException {
-
+		LOG.debug("emailIdLst :: {}", emailIdLst);
 		for (String toEmailId : emailIdLst) {
 			if (toEmailId != null) {
 				try {
-					System.out.println("============sendTicketNotification========toEmailId :: "+toEmailId);
 					SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 					simpleMailMessage.setSubject("Test Mail");
 					simpleMailMessage.setTo(toEmailId);
@@ -50,7 +54,8 @@ public class LocalAdminMailServiceImpl implements LocalAdminMailService {
 					mailSender.send(simpleMailMessage);
 				} catch (MailException ex) {
 					// log mail exception
-					ex.printStackTrace();
+					LOG.error("Error @ sendTicketNotification :: {}",
+							ex.getMessage());
 				}
 			}
 		}
@@ -62,11 +67,13 @@ public class LocalAdminMailServiceImpl implements LocalAdminMailService {
 	public void sendTicketNotification(TicketDetails ticketDtls)
 			throws MailException, Exception {
 
+		LOG.debug("ticketDtls :: {}", ticketDtls);
 		String status = ticketDtls.getStatus();
 
 		String emailContent = localAdminDAO.getEmailContent(new MailContentId(
 				ticketDtls.getUserRole(), status));
 
+		LOG.debug("emailContent :: {}", emailContent);
 		TicketStatus ticketStatus = null;
 		for (TicketStatus ts : TicketStatus.values()) {
 			if (ts.toString().equals(status)) {
@@ -74,6 +81,9 @@ public class LocalAdminMailServiceImpl implements LocalAdminMailService {
 				break;
 			}
 		}
+
+		LOG.info("ticketStatus :: {}, itAdminEmailId :: {} ", ticketStatus,
+				itAdminEmailId);
 		switch (ticketStatus) {
 
 		case IN_PROGRESS: {

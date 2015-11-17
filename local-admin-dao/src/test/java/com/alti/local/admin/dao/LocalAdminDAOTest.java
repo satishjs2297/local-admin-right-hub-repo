@@ -15,15 +15,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.alti.local.admin.dao.model.UserTicketDetails;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:/config/spring/localAdmin-daoJpaConfig.xml" })
+@ContextConfiguration(locations = {
+		"classpath:/config/spring/localAdmin-daoJpaConfig.xml",
+		"classpath:localAdmin-daoJpaConfig-test.xml" })
 public class LocalAdminDAOTest {
 
 	@Autowired
 	private LocalAdminDAO localAdminDAO;
-	
+
 	private UserTicketDetails userTicketDtls;
-	
-	
 
 	@Before
 	public void setUp() {
@@ -42,24 +42,24 @@ public class LocalAdminDAOTest {
 
 	}
 
-	@Test 
+	@Test
 	public void testSaveUserTicketDetails() {
 		try {
-			
+
 			localAdminDAO.saveUserTicketDetails(userTicketDtls);
-			
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-	
-	@Test @Ignore
+
+	@Test
+	@Ignore
 	public void testFindUserTicketDetails() {
-		List<UserTicketDetails> userTicketDtls = localAdminDAO.findUserTicketDetailsByStatus("inprogress");
+		List<UserTicketDetails> userTicketDtls = localAdminDAO
+				.findUserTicketDetailsByStatus("inprogress");
 		Assert.assertNotNull(userTicketDtls);
-		System.out.println("userTicketDtls ::: "+userTicketDtls);
+		System.out.println("userTicketDtls ::: " + userTicketDtls);
 	}
-	
-	
 
 }

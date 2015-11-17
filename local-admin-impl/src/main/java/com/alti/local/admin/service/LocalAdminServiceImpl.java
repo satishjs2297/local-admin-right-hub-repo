@@ -6,6 +6,8 @@ package com.alti.local.admin.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ import com.alti.local.admin.util.TicketDetailsUtil;
 @Service
 public class LocalAdminServiceImpl implements LocalAdminService {
 
+	private static final Logger LOG = LoggerFactory
+			.getLogger(LocalAdminService.class);
+
 	@Autowired
 	private LocalAdminDAO localAdminDAO;
 
@@ -35,7 +40,11 @@ public class LocalAdminServiceImpl implements LocalAdminService {
 			throws LocalAdminException {
 		UserTicketDetails userTckDtlsModel = new UserTicketDetails();
 		try {
+
 			BeanUtils.copyProperties(userTckDtls, userTckDtlsModel);
+
+			LOG.debug("userTckDtls :: {}, new Object :: {}", userTckDtls,
+					userTckDtlsModel);
 
 			// Persist UserTicketDetails
 			localAdminDAO.saveUserTicketDetails(userTckDtlsModel);
@@ -44,7 +53,7 @@ public class LocalAdminServiceImpl implements LocalAdminService {
 			eMailService.sendTicketNotification(userTckDtls);
 
 		} catch (Exception ex) {
-			// log exception
+			LOG.error("Error @ saveUserTicketDetails :: {}", ex.getMessage());
 			throw new LocalAdminException(ex);
 		}
 		return userTckDtlsModel.getTicketId();
@@ -53,11 +62,14 @@ public class LocalAdminServiceImpl implements LocalAdminService {
 	@Override
 	public List<TicketDetails> getUserTicketDetails(String status)
 			throws LocalAdminException {
+		LOG.debug("status :: {}", status);
 		List<UserTicketDetails> ticketDetailsByStatus = localAdminDAO
 				.findUserTicketDetailsByStatus(status);
+		LOG.debug("ticketDetailsByStatus :: {}", ticketDetailsByStatus);
 		List<TicketDetails> tckDtlsLst = new ArrayList<TicketDetails>();
 		for (UserTicketDetails userTckDtls : ticketDetailsByStatus) {
-			TicketDetails targetTckDtls = TicketDetailsUtil.convertToTicketDetails(userTckDtls);
+			TicketDetails targetTckDtls = TicketDetailsUtil
+					.convertToTicketDetails(userTckDtls);
 			tckDtlsLst.add(targetTckDtls);
 		}
 		return tckDtlsLst;
@@ -68,12 +80,16 @@ public class LocalAdminServiceImpl implements LocalAdminService {
 			String status, String bj) throws LocalAdminException {
 		String updateMsg = null;
 		try {
+			LOG.debug(
+					"userRole ::{}, ticketId :: {}, status :: {}, bussiness justification :: {}",
+					userRole, ticketId, status, bj);
 			UserTicketDetails userTicketDetails = localAdminDAO
 					.fetchUserTicketDetailsByTicketId(ticketId);
 			
+			LOG.debug("userTicketDetails :: {}",userTicketDetails);
 			if (userTicketDetails == null)
 				return "Data Not Found with TicketId:: " + ticketId;
-			
+
 			if (LocalAdminConstants.EMP_ROLEID.equals(userRole)) {
 				userTicketDetails.setEmpBJ(bj);
 			} else if (LocalAdminConstants.MANAGER_ROLEID.equals(userRole)) {
@@ -82,15 +98,22 @@ public class LocalAdminServiceImpl implements LocalAdminService {
 				userTicketDetails.setAdminBJ(bj);
 			}
 			userTicketDetails.setStatus(status);
-			boolean updateStatus = localAdminDAO.updateUserTicketDetails(userTicketDetails);
-			if(updateStatus)
-				updateMsg = "Selected Ticket ( "+ ticketId + ") has been updated.";
 			
+			LOG.debug("userTicketDetails :: {}",userTicketDetails);
+			boolean updateStatus = localAdminDAO
+					.updateUserTicketDetails(userTicketDetails);
+			
+			LOG.debug("updateStatus :: {}",updateStatus);
+			if (updateStatus)
+				updateMsg = "Selected Ticket ( " + ticketId
+						+ ") has been updated.";
+
 			// Send eMail to User
-			eMailService.sendTicketNotification(TicketDetailsUtil.convertToTicketDetails(userTicketDetails));
+			eMailService.sendTicketNotification(TicketDetailsUtil
+					.convertToTicketDetails(userTicketDetails));
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.error("Error @ updateUserTicketDetails :: {}",ex.getMessage());
 		}
 		return updateMsg;
 	}

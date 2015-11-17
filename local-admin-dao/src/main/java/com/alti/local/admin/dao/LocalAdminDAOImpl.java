@@ -8,6 +8,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,6 +27,9 @@ import com.alti.local.admin.dao.repository.LocalAdminRepository;
 @Repository
 public class LocalAdminDAOImpl implements LocalAdminDAO {
 
+	private static final Logger LOG = LoggerFactory
+			.getLogger(LocalAdminDAO.class);
+
 	@PersistenceContext(unitName = "ALTI_DBUNIT")
 	private EntityManager eManager;
 
@@ -35,6 +40,7 @@ public class LocalAdminDAOImpl implements LocalAdminDAO {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean saveUserTicketDetails(UserTicketDetails userTckDtls)
 			throws Exception {
+		LOG.debug("userTckDtls :: {}", userTckDtls);
 		return localAdminRepo.save(userTckDtls) != null;
 	}
 
@@ -42,19 +48,19 @@ public class LocalAdminDAOImpl implements LocalAdminDAO {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean updateUserTicketDetails(UserTicketDetails userTckDtls)
 			throws Exception {
-
+		LOG.debug("userTckDtls :: {}", userTckDtls);
 		return eManager.merge(userTckDtls) != null;
 	}
 
 	@Override
 	public List<UserTicketDetails> findUserTicketDetailsByStatus(String status) {
-
+		LOG.debug("status :: {}", status);
 		return localAdminRepo.findUserTicketDetailsByStatus(status);
 	}
 
 	@Override
 	public UserTicketDetails fetchUserTicketDetailsByTicketId(String ticketId) {
-
+		LOG.debug("ticketId :: {}", ticketId);
 		return localAdminRepo.findOne(ticketId);
 	}
 

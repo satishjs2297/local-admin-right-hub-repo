@@ -3,6 +3,8 @@
  */
 package com.alti.local.admin.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,9 @@ import com.alti.local.admin.service.LocalAdminService;
 @RestController
 @RequestMapping("/ladmin-employee")
 public class LocalAdminEmpController {
+	
+	private static final Logger LOG = LoggerFactory
+			.getLogger(LocalAdminEmpController.class);
 	
 	@Autowired
 	private LocalAdminService localAdminService;
@@ -37,13 +42,13 @@ public class LocalAdminEmpController {
 	@RequestMapping(value = "/submitreq", method = RequestMethod.POST)
 	public String createNewRequest(@RequestBody TicketDetails userticketdetails) {
 
-		System.out.println("LocalAdminController#initiateRequest#");
+		LOG.debug("userticketdetails :: {}",userticketdetails);
 		if (userticketdetails == null)
 			throw new IllegalArgumentException("Userticketdetails is null");
 
 		// Service call to persist userticketdetails details
 		String ticketId = localAdminService.saveUserTicketDetails(userticketdetails);
-		
+		LOG.debug("ticketId :: {}",ticketId);
 		return ticketId;
 	}
 
